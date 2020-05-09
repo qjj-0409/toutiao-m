@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <h1>黑马头条</h1>
+    <router-view/>
     <van-button type="default">默认按钮</van-button>
     <van-button type="primary">主要按钮</van-button>
     <van-button type="info">信息按钮</van-button>
@@ -10,8 +11,12 @@
       <van-cell title="单元格" value="内容" />
       <van-cell title="单元格" value="内容" label="描述信息" />
     </van-cell-group>
-    <router-view/>
     <div class="box" style="font-size:12px">你好啊</div>
+    <i class="toutiao toutiao-shouye"></i>
+    <i class="toutiao toutiao-shouji"></i><br>
+    <van-icon name="chat-o" dot />
+    <van-icon name="like-o" />
+    <van-icon class-prefix="toutiao" name="shoucang" />
   </div>
 </template>
 
