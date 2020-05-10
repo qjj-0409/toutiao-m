@@ -73,8 +73,8 @@ export default {
   data () {
     return {
       user: {
-        mobile: '', // 手机号
-        code: '' // 验证码
+        mobile: '13911111111', // 手机号
+        code: '246810' // 验证码
       },
       formRules: {
         mobile: [
@@ -102,9 +102,10 @@ export default {
         duration: 0 // 展示时长(ms)，值为 0 时，toast 不会消失
       })
       try {
-        const res = await login(this.user)
-        console.log(res)
+        const { data } = await login(this.user)
+        // console.log(res)
         Toast.success('登录成功')
+        this.$store.commit('getUser', data.data)
       } catch (error) {
         Toast.fail('登录失败')
       }
