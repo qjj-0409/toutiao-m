@@ -26,6 +26,7 @@
       <van-field
         v-model="user.code"
         clearable
+        center
         icon-prefix="toutiao"
         left-icon="yanzhengma"
         placeholder="请输入验证码"
@@ -33,10 +34,18 @@
         :rules="formRules.code"
       >
         <template #button>
+          <van-count-down
+            v-if="isShowCountDown"
+            :time="1000 * 60"
+            format="ss s"
+            @finish="isShowCountDown = false"
+          />
           <van-button
+            v-else
             class="send-btn"
             size="mini"
             round
+            :loading="isSendSmsLoading"
             @click.prevent="onSendSms"
           >发送验证码</van-button>
         </template>
@@ -54,7 +63,7 @@
 </template>
 
 <script>
-import { login } from '@/api/user'
+import { login, sendSms } from '@/api/user'
 import { Toast } from 'vant'
 
 export default {
@@ -76,7 +85,9 @@ export default {
           { required: true, message: '请填写验证码' },
           { pattern: /^\d{6}$/, message: '请输入正确的验证码格式' }
         ]
-      }
+      },
+      isShowCountDown: false, // 控制显示倒计时
+      isSendSmsLoading: false // 控制发送验证码的loading
     }
   },
   computed: {},
@@ -112,12 +123,29 @@ export default {
       try {
         // 验证手机号码
         await this.$refs['login-from'].validate('mobile')
+        // 展示按钮的loading，防止网络过慢用户多次点击
+        this.isSendSmsLoading = true
+        // 发送验证码
+        await sendSms(this.user.mobile)
+        // 验证码发送出去之后，隐藏发送验证码按钮，显示倒计时
+        this.isShowCountDown = true
       } catch (err) {
+        console.dir(err)
+        let message = ''
+        if (err && err.response && err.response.status === 429) {
+          message = '发送验证码操作频繁，请稍后重试！'
+        } else if (err.name === 'mobile') {
+          message = err.message
+        } else {
+          message = '发送失败，请稍后重试'
+        }
         Toast({
-          message: err.message,
+          message,
           position: 'top'
         })
       }
+      // 无论成功或失败，都要关闭发动按钮的loading
+      this.isSendSmsLoading = false
     }
   },
   mounted () {}
