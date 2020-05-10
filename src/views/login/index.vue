@@ -7,12 +7,18 @@
       @click-left="$router.back()"
     />
     <!-- 登录表单 -->
-    <van-cell-group>
+    <van-form
+      :show-error="false"
+      :show-error-message="false"
+      @submit="onlogin"
+      @failed="onFailed"
+    >
       <van-field
         v-model="user.mobile"
         icon-prefix="toutiao"
         left-icon="shouji"
         placeholder="请输入手机号"
+        :rules="FormRules.mobile"
       />
       <van-field
         v-model="user.code"
@@ -20,6 +26,7 @@
         icon-prefix="toutiao"
         left-icon="yanzhengma"
         placeholder="请输入验证码"
+        :rules="FormRules.code"
       >
         <template #button>
           <van-button
@@ -34,10 +41,9 @@
           class="login-btn"
           block
           type="info"
-          @click="onlogin"
         >登录</van-button>
       </div>
-    </van-cell-group>
+    </van-form>
     <!-- /登录表单 -->
   </div>
 </template>
@@ -55,6 +61,16 @@ export default {
       user: {
         mobile: '', // 手机号
         code: '' // 验证码
+      },
+      FormRules: {
+        mobile: [
+          { required: true, message: '请填写手机号' },
+          { pattern: /^1[3578]\d{9}$/, message: '请输入正确的手机号码格式' }
+        ],
+        code: [
+          { required: true, message: '请填写验证码' },
+          { pattern: /^\d{6}$/, message: '请输入正确的验证码格式' }
+        ]
       }
     }
   },
@@ -75,6 +91,15 @@ export default {
         Toast.success('登录成功')
       } catch (error) {
         Toast.fail('登录失败')
+      }
+    },
+    onFailed (error) {
+      console.log(error)
+      if (error.errors[0]) {
+        Toast({
+          message: error.errors[0].message,
+          position: top
+        })
       }
     }
   },
