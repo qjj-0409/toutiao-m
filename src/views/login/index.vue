@@ -44,6 +44,7 @@
 
 <script>
 import { login } from '@/api/user'
+import { Toast } from 'vant'
 
 export default {
   name: 'LoginIndex',
@@ -62,11 +63,18 @@ export default {
   created () {},
   methods: {
     async onlogin () {
+      // 展示加载提示
+      Toast.loading({
+        message: '加载中...', // 提示文本
+        forbidClick: true, // 是否禁止背景点击
+        duration: 0 // 展示时长(ms)，值为 0 时，toast 不会消失
+      })
       try {
         const res = await login(this.user)
         console.log(res)
+        Toast.success('登录成功')
       } catch (error) {
-        console.log('错误：' + error)
+        Toast.fail('登录失败')
       }
     }
   },
@@ -86,12 +94,13 @@ export default {
   }
   .login-btn-wrap {
     padding: 26px 16px;
+    background-color: #f5f7f9;
     .login-btn {
       background-color: #6db4fb;
       border: none;
-    }
-    .van-button__text {
-      font-size: 15px;
+      .van-button__text {
+        font-size: 15px;
+      }
     }
   }
 }
