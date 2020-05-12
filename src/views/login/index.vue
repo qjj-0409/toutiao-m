@@ -147,6 +147,9 @@ export default {
       }
       // 无论成功或失败，都要关闭发动按钮的loading
       this.isSendSmsLoading = false
+
+      // 发送失败，显示发送按钮，关闭倒计时
+      this.isShowCountDown = false
     }
   },
   mounted () {}
