@@ -13,9 +13,12 @@
           class="avatar"
           round
           fill="cover"
-          src="https://img.yzcdn.cn/vant/cat.jpeg"
+          :src="currentUser.photo"
         />
-        <span class="my-userName" slot="title">昵称</span>
+        <span
+          class="my-userName"
+          slot="title"
+        >{{currentUser.name}}</span>
         <van-button
           class="my-updateBtn"
           type="default"
@@ -29,26 +32,26 @@
       >
         <van-grid-item class="data-info-item">
           <div class="text-wrap" slot="text">
-            <div class="count">883</div>
+            <div class="count">{{currentUser.art_count}}</div>
             <div class="text">头条</div>
           </div>
         </van-grid-item>
         <van-grid-item class="data-info-item">
           <div class="text-wrap" slot="text">
-            <div class="count">883</div>
-            <div class="text">头条</div>
+            <div class="count">{{currentUser.follow_count}}</div>
+            <div class="text">关注</div>
           </div>
         </van-grid-item>
         <van-grid-item class="data-info-item">
           <div class="text-wrap" slot="text">
-            <div class="count">883</div>
-            <div class="text">头条</div>
+            <div class="count">{{currentUser.fans_count}}</div>
+            <div class="text">粉丝</div>
           </div>
         </van-grid-item>
         <van-grid-item class="data-info-item">
           <div class="text-wrap" slot="text">
-            <div class="count">883</div>
-            <div class="text">头条</div>
+            <div class="count">{{currentUser.like_count}}</div>
+            <div class="text">获赞</div>
           </div>
         </van-grid-item>
       </van-grid>
@@ -97,6 +100,7 @@
       v-if="user"
       class="my-logout"
       title="退出登录"
+      @click="onLogout"
     />
     <!-- /退出登录 -->
   </div>
@@ -104,19 +108,44 @@
 
 <script>
 import { mapState } from 'vuex'
+import { getCurrentUser } from '@/api/user'
 export default {
   name: 'MyIndex',
   props: {},
   components: {},
   data () {
-    return {}
+    return {
+      currentUser: {} // 当前登录用户
+    }
   },
   computed: {
     ...mapState(['user'])
   },
   watch: {},
-  created () {},
-  methods: {},
+  created () {
+    this.loadCurrentUser()
+  },
+  methods: {
+    onLogout () {
+      this.$dialog.confirm({
+        title: '退出提示',
+        message: '你确定退出登录状态吗？'
+      })
+        .then(() => {
+          // on confirm 确认退出
+          // 清除用户登录状态
+          this.$store.commit('setUser', null)
+        })
+        .catch(() => {
+          // on cancel 取消退出
+        })
+    },
+    async loadCurrentUser () {
+      const { data } = await getCurrentUser()
+      console.log(data)
+      this.currentUser = data.data
+    }
+  },
   mounted () {}
 }
 </script>

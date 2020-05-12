@@ -105,7 +105,7 @@ export default {
         const { data } = await login(this.user)
         // console.log(res)
         Toast.success('登录成功')
-        this.$store.commit('getUser', data.data)
+        this.$store.commit('setUser', data.data)
 
         // 登录成功，跳转到来时的页面
         this.$router.back()

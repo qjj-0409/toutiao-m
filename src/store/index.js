@@ -11,7 +11,7 @@ export default new Vuex.Store({
     user: getItem(USER_KEY)
   },
   mutations: {
-    getUser (state, data) {
+    setUser (state, data) {
       state.user = data
       setItem(USER_KEY, state.user)
       // window.localStorage.setItem('user', JSON.stringify(state.user))
