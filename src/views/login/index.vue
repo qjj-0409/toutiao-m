@@ -106,6 +106,9 @@ export default {
         // console.log(res)
         Toast.success('登录成功')
         this.$store.commit('getUser', data.data)
+
+        // 登录成功，跳转到来时的页面
+        this.$router.back()
       } catch (error) {
         Toast.fail('登录失败')
       }

@@ -1,7 +1,8 @@
 <template>
   <div class="my-container">
     <!-- 个人信息 -->
-    <van-cell-group class="my-user">
+    <!-- 登录时 -->
+    <van-cell-group v-if="user" class="my-user">
       <van-cell
         class="my-userInfo"
         center
@@ -52,6 +53,13 @@
         </van-grid-item>
       </van-grid>
     </van-cell-group>
+    <!-- 未登录时 -->
+    <div v-else class="not-login">
+      <div @click="$router.push('login')">
+        <img class="mobile" src="./手机.png" alt="">
+      </div>
+      <div class="text">登录 / 注册</div>
+    </div>
     <!-- /个人信息 -->
     <!-- 收藏-历史 -->
     <van-grid class="my-grid mb-4" :column-num="2">
@@ -86,6 +94,7 @@
     <!-- /小智同学 -->
     <!-- 退出登录 -->
     <van-cell
+      v-if="user"
       class="my-logout"
       title="退出登录"
     />
@@ -94,6 +103,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'MyIndex',
   props: {},
@@ -101,7 +111,9 @@ export default {
   data () {
     return {}
   },
-  computed: {},
+  computed: {
+    ...mapState(['user'])
+  },
   watch: {},
   created () {},
   methods: {},
@@ -110,6 +122,23 @@ export default {
 </script>
 <style lang='less' scoped>
 .my-container {
+  .not-login {
+    height: 180px;
+    background: url('./banner.png') no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .mobile {
+      width: 66px;
+      height: 66px;
+    }
+    .text {
+      font-size: 14px;
+      color: #fff;
+    }
+  }
   .my-user {
     background: url(./banner.png) no-repeat;
     background-size: cover;
@@ -141,6 +170,7 @@ export default {
         .text-wrap {
           display: flex;
           flex-direction: column;
+          justify-content: center;
           align-items: center;
           .count {
             font-size: 18px;
