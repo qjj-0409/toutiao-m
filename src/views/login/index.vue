@@ -102,8 +102,9 @@ export default {
         duration: 0 // 展示时长(ms)，值为 0 时，toast 不会消失
       })
       try {
+        console.log(111)
         const { data } = await login(this.user)
-        // console.log(res)
+        console.log(data)
         Toast.success('登录成功')
         this.$store.commit('setUser', data.data)
 
