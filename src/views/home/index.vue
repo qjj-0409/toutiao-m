@@ -22,19 +22,28 @@
         v-for="channel in channels"
         :key="channel.id"
         :title="channel.name"
-      >{{channel.name}}的内容</van-tab>
+      >
+        <article-list
+          :channel="channel"
+        ></article-list>
+      </van-tab>
     </van-tabs>
     <!-- /文章频道列表 -->
   </div>
 </template>
 
 <script>
+// 导入用户相关api
 import { getUserChannels } from '@/api/user'
+// 导入子组件
+import ArticleList from './components/article-list'
 
 export default {
   name: 'HomeIndex',
   props: {},
-  components: {},
+  components: {
+    ArticleList
+  },
   data () {
     return {
       active: 0, // 控制激活的标签
