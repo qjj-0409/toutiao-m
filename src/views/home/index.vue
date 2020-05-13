@@ -24,7 +24,6 @@
         :title="channel.name"
       >
         <article-list
-          class="article-list"
           :channel="channel"
         ></article-list>
       </van-tab>
@@ -85,14 +84,6 @@ export default {
         }
       }
     }
-  }
-  .article-list {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 50px;
-    top: 90px;
-    overflow-y: auto;
   }
 }
 </style>
