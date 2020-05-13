@@ -150,6 +150,8 @@ export default {
 </script>
 <style lang='less' scoped>
 .my-container {
+  // 用户信息展示
+  // 未登录时
   .not-login {
     height: 180px;
     background: url('./banner.png') no-repeat;
@@ -167,6 +169,7 @@ export default {
       color: #fff;
     }
   }
+  // 登录时
   .my-user {
     background: url(./banner.png) no-repeat;
     background-size: cover;
@@ -215,6 +218,7 @@ export default {
       }
     }
   }
+  // 收藏/历史
   /deep/ .my-grid {
     .van-grid-item {
       height: 70px;
@@ -233,9 +237,11 @@ export default {
       }
     }
   }
+  // 统一设置下外边距
   .mb-4 {
     margin-bottom: 4px;
   }
+  // 登录退出按钮
   .my-logout {
     text-align: center;
     color: #d86262;
