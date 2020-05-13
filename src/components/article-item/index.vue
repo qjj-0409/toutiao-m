@@ -34,21 +34,28 @@
         <div class="label-info">
           <span>{{article.aut_name}}</span>
           <span>{{article.comm_count}}评论</span>
-          <span>{{article.pubdate}}</span>
+          <span>{{article.pubdate | relativeTime}}</span>
         </div>
       </div>
       <!-- /底部信息 -->
       <!-- 右侧封面 -->
-      <div
+      <!-- <div
         slot="default"
         v-if="article.cover.type === 1"
       >
         <van-image
+          v-if="article.cover.type === 1"
           class="right-cover"
           fit="cover"
           :src="article.cover.images[0]"
         />
-      </div>
+      </div> -->
+      <van-image
+        v-if="article.cover.type === 1"
+        class="right-cover"
+        fit="cover"
+        :src="article.cover.images[0]"
+      />
       <!-- /右侧封面 -->
     </van-cell>
   </div>
@@ -77,6 +84,12 @@ export default {
 <style lang='less' scoped>
 .article-item {
   .article-item-wrap {
+    border-bottom: 1px solid #edeff3;
+    .van-cell__title {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
     /deep/ .van-cell__value {
       flex: unset;
       margin-left: 12px;
@@ -103,6 +116,8 @@ export default {
     .label-info {
       span {
         margin-right: 12px;
+        color: #b4b4b4;
+        font-size: 11px;
       }
     }
   }

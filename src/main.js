@@ -14,6 +14,9 @@ import 'amfe-flexible'
 // 引入全局样式文件（最好放到最后，方便覆盖第三方样式）
 import './styles/index.less'
 
+// 加载使用dayjs.js相对时间模块
+import './utils/dayjs'
+
 // 全局注册Vant中的组件
 Vue.use(Vant)
 
