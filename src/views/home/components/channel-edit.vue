@@ -50,7 +50,12 @@
 </template>
 
 <script>
-import { getAllChannles } from '@/api/channel'
+import {
+  getAllChannles,
+  addUserChannles
+} from '@/api/channel'
+import { mapState } from 'vuex'
+import { setItem } from '@/utils/storage'
 
 export default {
   name: 'ChannelEdit',
@@ -72,6 +77,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['user']),
     // 推荐的频道列表
     recommendChannels () {
       // 思路：所有频道 - 我的频道 = 剩余推荐频道
@@ -96,11 +102,23 @@ export default {
       this.allChannels = data.data.channels
     },
     // 添加频道函数
-    onAdd (recomChannel) {
+    async onAdd (recomChannel) {
       // 添加推荐频道到我的频道
       this.userChannels.push(recomChannel)
 
       // 数据持久化
+      if (this.user) {
+        // 如果登录了，数据存储到线上
+        const { data } = await addUserChannles({
+          channels: [
+            { id: recomChannel.id, seq: this.userChannels.length }
+          ]
+        })
+        console.log(data)
+      } else {
+        // 如果未登录，数据存储在本地
+        setItem('user-channels', this.userChannels)
+      }
     },
     // 点击我的频道触发的函数
     onUserChannelClick (index) {
