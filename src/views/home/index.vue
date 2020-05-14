@@ -47,11 +47,14 @@
     <!-- 弹出层 -->
     <van-popup
       v-model="isPopupShow"
+      get-container="body"
       position="bottom"
       :style="{ height: '100%' }"
       closeable
       close-icon-position="top-left"
-    ></van-popup>
+    >
+      <channel-edit></channel-edit>
+    </van-popup>
     <!-- /弹出层 -->
   </div>
 </template>
@@ -61,12 +64,14 @@
 import { getUserChannels } from '@/api/user'
 // 导入子组件
 import ArticleList from './components/article-list'
+import ChannelEdit from './components/channel-edit'
 
 export default {
   name: 'HomeIndex',
   props: {},
   components: {
-    ArticleList
+    ArticleList,
+    ChannelEdit
   },
   data () {
     return {
