@@ -70,6 +70,9 @@ import { getUserChannels } from '@/api/user'
 // 导入子组件
 import ArticleList from './components/article-list'
 import ChannelEdit from './components/channel-edit'
+// 导入vuex中的state数据
+import { mapState } from 'vuex'
+import { getItem } from '@/utils/storage'
 
 export default {
   name: 'HomeIndex',
@@ -85,16 +88,34 @@ export default {
       isPopupShow: false // 控制是否显示弹出层
     }
   },
-  computed: {},
+  computed: {
+    ...mapState(['user'])
+  },
   watch: {},
   created () {
     this.loadChannels()
   },
   methods: {
     async loadChannels () {
-      const { data } = await getUserChannels()
-      // console.log(data)
-      this.channels = data.data.channels
+      let channels = []
+      if (this.user) {
+        // 如果登录了，请求获取线上的用户频道列表数据
+        const { data } = await getUserChannels()
+        channels = data.data.channels
+      } else {
+        // 如果没有登录，判断是否有本地存储的频道列表数据
+        const localChannels = getItem('user-channels')
+        if (localChannels) {
+          // 如果有本地存储频道列表，则使用本地存储的频道列表数据
+          channels = localChannels
+        } else {
+          // 如果没有本地存储频道列表，则使用接口定义的给匿名用户展示的频道列表数据
+          const { data } = await getUserChannels()
+          channels = data.data.channels
+        }
+      }
+      // 把处理好的数据放到data中以供模板使用
+      this.channels = channels
     }
   },
   mounted () {}

@@ -34,7 +34,7 @@ export const getCurrentUser = () => {
   })
 }
 
-// 获取用户频道列表
+// 获取用户频道列表（这个接口不强制用户登录，匿名用户返回后台设置的默认频道列表）
 export const getUserChannels = () => {
   return request({
     method: 'GET',
