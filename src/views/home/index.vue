@@ -55,6 +55,8 @@
     >
       <channel-edit
         :user-channels="channels"
+        @close="isPopupShow = false"
+        @update-active="active = $event"
       ></channel-edit>
     </van-popup>
     <!-- /弹出层 -->
@@ -77,7 +79,7 @@ export default {
   },
   data () {
     return {
-      active: 0, // 控制激活的标签
+      active: 0, // 控制激活的标签的索引
       channels: [], // 文章频道列表
       isPopupShow: false // 控制是否显示弹出层
     }

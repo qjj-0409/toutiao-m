@@ -116,7 +116,10 @@ export default {
     },
     // 切换频道函数
     switchChannel (index) {
-      console.log('切换频道')
+      // 子传父，通过自定义事件的方式，将当前点击的频道激活
+      this.$emit('update-active', index)
+      // 关闭弹出层
+      this.$emit('close')
     }
   },
   mounted () {}
