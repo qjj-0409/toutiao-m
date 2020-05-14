@@ -23,7 +23,7 @@
         v-for="(channel, index) in userChannels"
         :key="index"
         :text="channel.name"
-        @click="onUserChannelClick(index)"
+        @click="onUserChannelClick(channel, index)"
       />
     </van-grid>
     <!-- /我的频道模块 -->
@@ -52,10 +52,13 @@
 <script>
 import {
   getAllChannles,
-  addUserChannles
+  addUserChannles,
+  deleteChannle
 } from '@/api/channel'
 import { mapState } from 'vuex'
-import { setItem } from '@/utils/storage'
+import {
+  setItem
+} from '@/utils/storage'
 
 export default {
   name: 'ChannelEdit',
@@ -109,29 +112,28 @@ export default {
       // 数据持久化
       if (this.user) {
         // 如果登录了，数据存储到线上
-        const { data } = await addUserChannles({
+        await addUserChannles({
           channels: [
             { id: recomChannel.id, seq: this.userChannels.length }
           ]
         })
-        console.log(data)
       } else {
         // 如果未登录，数据存储在本地
         setItem('user-channels', this.userChannels)
       }
     },
     // 点击我的频道触发的函数
-    onUserChannelClick (index) {
+    onUserChannelClick (channel, index) {
       if (this.isEditShow) {
         // 编辑状态，删除点击的频道
-        this.deleteChannel(index)
+        this.deleteChannel(channel, index)
       } else {
         // 非编辑状态，切换首页的频道
         this.switchChannel(index)
       }
     },
     // 删除频道函数
-    deleteChannel (index) {
+    async deleteChannel (channel, index) {
       // 如果删除的是当前激活频道之前的频道
       if (index <= this.active) {
         // 更新激活频道的索引
@@ -141,6 +143,13 @@ export default {
       this.userChannels.splice(index, 1)
 
       // 数据持久化
+      if (this.user) {
+        // 如果登录了，持久化到线上
+        await deleteChannle(channel.id)
+      } else {
+        // 如果未登录，持久化到本地
+        setItem('user-channels', this.userChannels)
+      }
     },
     // 切换频道函数
     switchChannel (index) {
