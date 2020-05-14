@@ -114,6 +114,11 @@ export default {
     },
     // 删除频道函数
     deleteChannel (index) {
+      // 如果删除的是当前激活频道之前的频道
+      if (index <= this.active) {
+        // 更新激活频道的索引
+        this.$emit('update-active', this.active - 1)
+      }
       // splice(index,length)：从指定索引index位置开始删除一个元素，不指定length默认删除从index开始的所有元素
       this.userChannels.splice(index, 1)
 
