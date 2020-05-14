@@ -18,10 +18,12 @@
     <van-grid :gutter="10">
       <van-grid-item
         class="grid-item"
-        :icon="isEditShow ? 'close' : ''"
+        :icon="(isEditShow && index !== 0) ? 'close' : ''"
         v-for="(channel, index) in userChannels"
         :key="index"
-        :text="channel.name" />
+        :text="channel.name"
+        @click="onUserChannelClick(index)"
+      />
     </van-grid>
     <!-- /我的频道模块 -->
     <!-- 推荐频道模块 -->
@@ -39,6 +41,7 @@
         v-for="(recomChannel, index) in recommendChannels"
         :key="index"
         :text="recomChannel.name"
+        @click="onAdd(recomChannel)"
       />
     </van-grid>
     <!-- /推荐频道模块 -->
@@ -81,10 +84,39 @@ export default {
     this.loadAllChannels()
   },
   methods: {
+    // 加载所有频道函数
     async loadAllChannels () {
       const { data } = await getAllChannles()
       console.log(data)
       this.allChannels = data.data.channels
+    },
+    // 添加频道函数
+    onAdd (recomChannel) {
+      // 添加推荐频道到我的频道
+      this.userChannels.push(recomChannel)
+
+      // 数据持久化
+    },
+    // 点击我的频道触发的函数
+    onUserChannelClick (index) {
+      if (this.isEditShow) {
+        // 编辑状态，删除点击的频道
+        this.deleteChannel(index)
+      } else {
+        // 非编辑状态，切换首页的频道
+        this.switchChannel(index)
+      }
+    },
+    // 删除频道函数
+    deleteChannel (index) {
+      // splice(index,length)：从指定索引index位置开始删除一个元素，不指定length默认删除从index开始的所有元素
+      this.userChannels.splice(index, 1)
+
+      // 数据持久化
+    },
+    // 切换频道函数
+    switchChannel (index) {
+      console.log('切换频道')
     }
   },
   mounted () {}
