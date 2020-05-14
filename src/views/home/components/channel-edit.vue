@@ -18,6 +18,7 @@
     <van-grid :gutter="10">
       <van-grid-item
         class="grid-item"
+        :class="{active: index === active}"
         :icon="(isEditShow && index !== 0) ? 'close' : ''"
         v-for="(channel, index) in userChannels"
         :key="index"
@@ -54,8 +55,12 @@ import { getAllChannles } from '@/api/channel'
 export default {
   name: 'ChannelEdit',
   props: {
-    userChannels: {
+    userChannels: { // 用户频道
       type: Array,
+      required: true
+    },
+    active: { // 被激活频道索引
+      type: Number,
       required: true
     }
   },
@@ -164,6 +169,12 @@ export default {
   .van-cell {
     padding-top: 20px;
     padding-bottom: 15px;
+  }
+  // 被激活频道样式
+  .active {
+    /deep/ .van-grid-item__text {
+      color: red;
+    }
   }
 }
 </style>

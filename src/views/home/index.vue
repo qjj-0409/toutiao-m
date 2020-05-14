@@ -55,6 +55,7 @@
     >
       <channel-edit
         :user-channels="channels"
+        :active="active"
         @close="isPopupShow = false"
         @update-active="active = $event"
       ></channel-edit>
