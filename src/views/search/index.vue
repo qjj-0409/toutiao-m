@@ -23,6 +23,7 @@
     <!-- 联想建议 -->
     <search-suggestion
       v-else-if="searchText"
+      :search-text="searchText"
     />
     <!-- /联想建议 -->
 

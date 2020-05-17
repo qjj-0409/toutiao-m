@@ -2,25 +2,42 @@
   <div class="search-suggestion">
     <van-cell
       icon="search"
-      title="联想建议"
-    />
-    <van-cell
-      icon="search"
-      title="hello"
+      :title="str"
+      v-for="(str, index) in suggestions"
+      :key="index"
     />
   </div>
 </template>
 
 <script>
+import { getSearchSuggestions } from '@/api/search'
+
 export default {
   name: 'SearchSuggestion',
-  props: {},
+  props: {
+    searchText: {
+      type: String,
+      required: true
+    }
+  },
   components: {},
   data () {
-    return {}
+    return {
+      suggestions: [] // 搜索建议数组
+    }
   },
   computed: {},
-  watch: {},
+  watch: {
+    // 监视数据的变化
+    searchText: {
+      async handler () {
+        const { data } = await getSearchSuggestions(this.searchText)
+        this.suggestions = data.data.options
+      },
+      // 该回调会在侦听开始之后被立即调用
+      immediate: true
+    }
+  },
   created () {},
   methods: {},
   mounted () {}
