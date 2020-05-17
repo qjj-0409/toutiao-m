@@ -41,7 +41,7 @@
         class="grid-item"
         v-for="(recomChannel, index) in recommendChannels"
         :key="index"
-        :text="recomChannel.name"
+        :text="'+' + recomChannel.name"
         @click="onAdd(recomChannel)"
       />
     </van-grid>

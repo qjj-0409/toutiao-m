@@ -10,6 +10,7 @@
         icon="search"
         round
         size="small"
+        to="/search"
       >搜索</van-button>
     </van-nav-bar>
     <!-- /顶部导航栏 -->
@@ -157,12 +158,16 @@ export default {
     .tabs-right {
       position: fixed;
       right: 0;
-      background-color: rgba(255,255,255,.9);
+      background-color: rgba(255,255,255, .8);
       height: 42px;
       width: 33px;
       display: flex;
       justify-content: center;
       align-items: center;
+      .van-icon-wap-nav {
+        font-size: 25px;
+        color: #646566;
+      }
       &::before {
         content: '';
         position: absolute;
