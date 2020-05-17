@@ -33,6 +33,7 @@
     <search-history
       v-else
       :search-histories="searchHistories"
+      @search="onSearch"
     />
     <!-- /历史记录 -->
   </div>
@@ -70,7 +71,7 @@ export default {
   },
   methods: {
     onSearch (searchStr) {
-      // 把输入框设置为你要搜素的文本
+      // 把输入框设置为你要搜索的文本
       this.searchText = searchStr
 
       // 记录搜索历史
@@ -99,6 +100,7 @@ export default {
       if (this.user) {
         // 获取用户后端存储的搜索历史记录
         const { data } = await getSearchHistories()
+        // searchHistories = data.data.keywords
         // 合并本地和线上的搜索历史纪录
         searchHistories = [...new Set([
           ...searchHistories,
