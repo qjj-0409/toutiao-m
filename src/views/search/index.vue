@@ -51,7 +51,7 @@ export default {
   data () {
     return {
       searchText: '', // 搜索关键字
-      isResultShow: true // 控制搜索结果的展示
+      isResultShow: false // 控制搜索结果的展示
     }
   },
   computed: {},
@@ -60,6 +60,8 @@ export default {
   methods: {
     onSearch () {
       console.log('搜索事件')
+      // 展示搜索结果
+      this.isResultShow = true
     }
   },
   mounted () {}
