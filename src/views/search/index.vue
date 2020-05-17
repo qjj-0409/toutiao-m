@@ -7,7 +7,7 @@
         v-model="searchText"
         show-action
         placeholder="请输入搜索关键词"
-        @search="onSearch"
+        @search="onSearch(searchText)"
         @cancel="$router.back()"
         @focus="isResultShow = false"
       />
@@ -25,6 +25,7 @@
     <search-suggestion
       v-else-if="searchText"
       :search-text="searchText"
+      @search="onSearch"
     />
     <!-- /联想建议 -->
 
@@ -59,7 +60,9 @@ export default {
   watch: {},
   created () {},
   methods: {
-    onSearch () {
+    onSearch (searchStr) {
+      // 把输入框设置为你要搜素的文本
+      this.searchText = searchStr
       // 展示搜索结果
       this.isResultShow = true
     }
