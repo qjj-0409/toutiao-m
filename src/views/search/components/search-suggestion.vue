@@ -11,6 +11,8 @@
 
 <script>
 import { getSearchSuggestions } from '@/api/search'
+// lodash 支持按需加载，有利于打包结果优化
+import { debounce } from 'lodash'
 
 export default {
   name: 'SearchSuggestion',
@@ -30,10 +32,14 @@ export default {
   watch: {
     // 监视数据的变化
     searchText: {
-      async handler () {
+      // debounce 函数
+      // 参数1：函数
+      // 参数2：防抖时间
+      // 返回值：防抖之后的函数，和参数1功能是一样的
+      handler: debounce(async function () {
         const { data } = await getSearchSuggestions(this.searchText)
         this.suggestions = data.data.options
-      },
+      }, 200),
       // 该回调会在侦听开始之后被立即调用
       immediate: true
     }
