@@ -17,6 +17,7 @@
     <!-- 搜索结果 -->
     <search-result
       v-if="isResultShow"
+      :search-text="searchText"
     />
     <!-- /搜索结果 -->
 
@@ -59,7 +60,6 @@ export default {
   created () {},
   methods: {
     onSearch () {
-      console.log('搜索事件')
       // 展示搜索结果
       this.isResultShow = true
     }
