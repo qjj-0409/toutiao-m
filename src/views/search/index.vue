@@ -9,21 +9,28 @@
         placeholder="请输入搜索关键词"
         @search="onSearch"
         @cancel="$router.back()"
+        @focus="isResultShow = false"
       />
     </form>
     <!-- /搜索框 -->
 
+    <!-- 搜索结果 -->
+    <search-result
+      v-if="isResultShow"
+    />
+    <!-- /搜索结果 -->
+
     <!-- 联想建议 -->
-    <search-suggestion />
+    <search-suggestion
+      v-else-if="searchText"
+    />
     <!-- /联想建议 -->
 
     <!-- 历史记录 -->
-    <search-history />
+    <search-history
+      v-else
+    />
     <!-- /历史记录 -->
-
-    <!-- 搜索结果 -->
-    <search-result />
-    <!-- /搜索结果 -->
   </div>
 </template>
 
@@ -42,7 +49,8 @@ export default {
   },
   data () {
     return {
-      searchText: '' // 搜索关键字
+      searchText: '', // 搜索关键字
+      isResultShow: true // 控制搜索结果的展示
     }
   },
   computed: {},
@@ -57,4 +65,12 @@ export default {
 }
 </script>
 <style lang='less' scoped>
+.search-result {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 54px;
+  bottom: 0;
+  overflow-y: auto;
+}
 </style>
