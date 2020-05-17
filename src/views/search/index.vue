@@ -32,6 +32,7 @@
     <!-- 历史记录 -->
     <search-history
       v-else
+      :search-histories="searchHistories"
     />
     <!-- /历史记录 -->
   </div>
@@ -53,7 +54,8 @@ export default {
   data () {
     return {
       searchText: '', // 搜索关键字
-      isResultShow: false // 控制搜索结果的展示
+      isResultShow: false, // 控制搜索结果的展示
+      searchHistories: [] // 搜索历史数据
     }
   },
   computed: {},
@@ -63,6 +65,16 @@ export default {
     onSearch (searchStr) {
       // 把输入框设置为你要搜素的文本
       this.searchText = searchStr
+
+      // 记录搜索历史
+      const index = this.searchHistories.indexOf(searchStr)
+      if (index !== -1) {
+        // 有重复项，把重复项删除
+        this.searchHistories.splice(index, 1)
+      }
+      // 把最新的搜索历史记录放到顶部
+      this.searchHistories.unshift(searchStr)
+
       // 展示搜索结果
       this.isResultShow = true
     }

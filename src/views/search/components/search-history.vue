@@ -9,16 +9,23 @@
       </div>
       <van-icon v-else name="delete" />
     </van-cell>
-    <van-cell value="历史记录a" />
-    <van-cell value="历史记录b" />
-    <van-cell value="历史记录c" />
+    <van-cell
+      :title="history"
+      v-for="(history, index) in searchHistories"
+      :key="index"
+    />
   </div>
 </template>
 
 <script>
 export default {
   name: 'SearchHistory',
-  props: {},
+  props: {
+    searchHistories: {
+      type: Array,
+      required: true
+    }
+  },
   components: {},
   data () {
     return {
