@@ -12,6 +12,7 @@
     <!-- 标题 -->
     <h1 class="article-title">{{article.title}}</h1>
     <!-- /标题 -->
+    <!-- 文章相关信息 -->
     <van-cell center :border="false">
       <div slot="title">{{article.aut_name}}</div>
       <span slot="label">{{article.pubdate | relativeTime}}</span>
@@ -25,17 +26,25 @@
       <van-button
         class="article-btn"
         round
-        icon="plus"
-        type="info"
+        :loading="isFollowLoading"
+        :icon="article.is_followed ? '' : 'plus'"
+        :type="article.is_followed ? 'default' : 'info'"
         size="small"
-      >关注</van-button>
+        @click="onFollow"
+      >{{article.is_followed ? '取消关注' : '关注'}}</van-button>
     </van-cell>
+    <!-- /文章相关信息 -->
+    <!-- 文章内容 -->
     <div
       class="markdown-body"
       v-html="article.content"
       ref="article-content"
     >
     </div>
+    <!-- /文章内容 -->
+    <!-- 相关操作 -->
+
+    <!-- /相关操作 -->
   </div>
 </template>
 
@@ -43,6 +52,7 @@
 import './github-markdown.css'
 import { getArticleById } from '@/api/article'
 import { ImagePreview } from 'vant'
+import { addFollow, delFollow } from '@/api/user'
 
 export default {
   name: 'ArticleIndex',
@@ -55,7 +65,8 @@ export default {
   components: {},
   data () {
     return {
-      article: {} // 文章详情对象
+      article: {}, // 文章详情对象
+      isFollowLoading: false // 控制关注的loading
     }
   },
   computed: {},
@@ -97,6 +108,23 @@ export default {
           })
         }
       })
+    },
+    // 关注用户
+    async onFollow () {
+      // 开启loading
+      this.isFollowLoading = true
+      // 判断用户当前的关注状态
+      if (this.article.is_followed) {
+        // 如果已关注，则取消关注
+        await delFollow(this.article.aut_id)
+      } else {
+        // 如果未关注，则关注
+        await addFollow(this.article.aut_id)
+      }
+      // 更新视图
+      this.article.is_followed = !this.article.is_followed
+      // 关闭loading
+      this.isFollowLoading = false
     }
   },
   mounted () {}
