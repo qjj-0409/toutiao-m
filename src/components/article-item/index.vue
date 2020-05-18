@@ -1,7 +1,19 @@
 <template>
-  <div class="article-item">
+  <!--
+    命名的路由
+     :to="{ name: '路由名', params: { 属性名: 值 } }"
+  -->
+  <div
+    class="article-item"
+  >
     <van-cell
       class="article-item-wrap"
+      :to="{
+        name: 'article',
+        params: {
+          articleId: article.art_id
+        }
+      }"
     >
       <!-- 标题 -->
       <div
