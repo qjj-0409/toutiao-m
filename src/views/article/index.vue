@@ -10,19 +10,17 @@
     </van-nav-bar>
     <!-- /顶部导航栏 -->
     <!-- 标题 -->
-    <h1 class="article-title">牛逼程序员都用的开源工具，你用了 几个？</h1>
+    <h1 class="article-title">{{article.title}}</h1>
     <!-- /标题 -->
     <van-cell center :border="false">
-      <div slot="title">天涯小行客</div>
-      <span slot="label">相对时间</span>
+      <div slot="title">{{article.aut_name}}</div>
+      <span slot="label">{{article.pubdate | relativeTime}}</span>
       <van-image
         class="avatar"
         slot="icon"
         round
-        width="35"
-        height="35"
         fit="cover"
-        src="https://img.yzcdn.cn/vant/cat.jpeg"
+        :src="article.aut_photo"
       />
       <van-button
         class="article-btn"
@@ -32,37 +30,45 @@
         size="small"
       >关注</van-button>
     </van-cell>
-    <div class="article-content markdown-body">
-      <p>哈哈哈哈</p>
-      <p>哈哈哈哈</p>
-      <ul>
-          <li>1</li>
-          <li>2</li>
-          <li>3</li>
-      </ul>
+    <div
+      class="markdown-body"
+      v-html="article.content"
+    >
     </div>
   </div>
 </template>
 
 <script>
 import './github-markdown.css'
+import { getArticleById } from '@/api/article'
 
 export default {
   name: 'ArticleIndex',
   props: {
     articleId: {
-      type: String,
+      type: [String, Array, Object],
       required: true
     }
   },
   components: {},
   data () {
-    return {}
+    return {
+      article: {} // 文章详情对象
+    }
   },
   computed: {},
   watch: {},
-  created () {},
-  methods: {},
+  created () {
+    this.onloadArticle()
+  },
+  methods: {
+    // 加载文章详情
+    async onloadArticle () {
+      const { data } = await getArticleById(this.articleId)
+      console.log(data)
+      this.article = data.data
+    }
+  },
   mounted () {}
 }
 </script>
@@ -85,10 +91,12 @@ ul {
 .article-title {
   font-size: 20px;
   color: #3a3a3a;
-  padding: 15px;
+  padding: 24px 20px 18px;
 }
 .avatar {
   margin-right: 8px;
+  width: 35px;
+  height: 35px;
 }
 /deep/ .van-cell__title {
   color: #545454;
@@ -103,5 +111,8 @@ ul {
   .van-button__text {
     font-size: 14px;
   }
+}
+.markdown-body {
+  padding: 14px;
 }
 </style>
