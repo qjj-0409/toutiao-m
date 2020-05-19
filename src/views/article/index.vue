@@ -48,6 +48,7 @@
         :source="articleId"
         :list="commentList"
         @comment-total-count="commentTotalCount = $event"
+        @reply-click="onReplyClick"
       />
       <!-- /评论模块 -->
     </div>
@@ -102,6 +103,21 @@
       />
     </van-popup>
     <!-- /评论弹出层 -->
+    <!-- 评论回复弹出层 -->
+    <van-popup
+      v-model="isReplyShow"
+      position="bottom"
+      :style="{ height: '90%' }"
+    >
+      <!-- 使用v-if的目的是让组件随着弹出层的显示进行渲染和销毁，防止加载过的组件不重新渲染导致不会重新加载数据 -->
+      <comment-reply
+        v-if="isReplyShow"
+        :reply-comment="replyComment"
+        :article-id="articleId"
+        @close="isReplyShow = false"
+      />
+    </van-popup>
+    <!-- /评论回复弹出层 -->
   </div>
 </template>
 
@@ -118,6 +134,7 @@ import { ImagePreview } from 'vant'
 import { addFollow, delFollow } from '@/api/user'
 import CommentList from './components/comment-list'
 import CommentPost from './components/comment-post'
+import CommentReply from './components/comment-reply'
 
 export default {
   name: 'ArticleIndex',
@@ -129,7 +146,8 @@ export default {
   },
   components: {
     CommentList,
-    CommentPost
+    CommentPost,
+    CommentReply
   },
   data () {
     return {
@@ -137,7 +155,9 @@ export default {
       isFollowLoading: false, // 控制关注的loading
       isPostShow: false, // 控制评论弹出层的显示
       commentList: [], // 文章评论列表
-      commentTotalCount: 0 // 文章评论数
+      commentTotalCount: 0, // 文章评论数
+      isReplyShow: false, // 控制评论回复弹出层的显示
+      replyComment: {} // 当前回复评论对象
     }
   },
   computed: {},
@@ -240,6 +260,14 @@ export default {
       this.commentList.unshift(newComment)
       // 更新视图中的评论数量
       this.commentTotalCount++
+    },
+    // 展示评论回复
+    onReplyClick (comment) {
+      // comment表示被点击的评论相关的信息
+      console.log('onReplyClick', comment)
+      this.replyComment = comment
+      // 展示评论回复弹出层
+      this.isReplyShow = true
     }
   },
   mounted () {}

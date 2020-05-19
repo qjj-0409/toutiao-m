@@ -11,6 +11,7 @@
         v-for="(comment, index) in list"
         :key="index"
         :comment="comment"
+        @reply-click="$emit('reply-click', $event)"
       />
     </van-list>
   </div>
@@ -28,10 +29,16 @@ export default {
       type: [String, Number, Object],
       required: true
     },
+    // 评论列表
     list: {
       type: Array,
       // 数组或对象的默认值必须通过函数返回
       default: () => []
+    },
+    // 评论类型，'a'表示对文章的评论，'c'表示对评论的回复
+    type: {
+      type: String,
+      default: 'a'
     }
   },
   components: {
@@ -53,10 +60,10 @@ export default {
     async onLoad () {
       // 1.请求获取数据
       const { data } = await getComments({
-        type: 'a',
-        source: this.source,
-        offset: this.offset,
-        limit: this.limit
+        type: this.type, // 评论类型
+        source: this.source.toString(), // 源id，文章id或评论id
+        offset: this.offset, // 获取评论数据的偏移量，值为评论id，表示从此id的数据向后取，不传表示从第一页开始读取数据
+        limit: this.limit // 每页大小
       })
       console.log(data)
       const { results } = data.data
