@@ -10,39 +10,42 @@
     </van-nav-bar>
     <!-- /顶部导航栏 -->
     <div class="article-wrap">
-    <!-- 标题 -->
-    <h1 class="article-title">{{article.title}}</h1>
-    <!-- /标题 -->
-    <!-- 文章相关信息 -->
-    <van-cell center :border="false">
-      <div slot="title">{{article.aut_name}}</div>
-      <span slot="label">{{article.pubdate | relativeTime}}</span>
-      <van-image
-        class="avatar"
-        slot="icon"
-        round
-        fit="cover"
-        :src="article.aut_photo"
-      />
-      <van-button
-        class="article-btn"
-        round
-        :loading="isFollowLoading"
-        :icon="article.is_followed ? '' : 'plus'"
-        :type="article.is_followed ? 'default' : 'info'"
-        size="small"
-        @click="onFollow"
-      >{{article.is_followed ? '取消关注' : '关注'}}</van-button>
-    </van-cell>
-    <!-- /文章相关信息 -->
-    <!-- 文章内容 -->
-    <div
-      class="markdown-body"
-      v-html="article.content"
-      ref="article-content"
-    >
-    </div>
-    <!-- /文章内容 -->
+      <!-- 标题 -->
+      <h1 class="article-title">{{article.title}}</h1>
+      <!-- /标题 -->
+      <!-- 文章相关信息 -->
+      <van-cell center :border="false">
+        <div slot="title">{{article.aut_name}}</div>
+        <span slot="label">{{article.pubdate | relativeTime}}</span>
+        <van-image
+          class="avatar"
+          slot="icon"
+          round
+          fit="cover"
+          :src="article.aut_photo"
+        />
+        <van-button
+          class="article-btn"
+          round
+          :loading="isFollowLoading"
+          :icon="article.is_followed ? '' : 'plus'"
+          :type="article.is_followed ? 'default' : 'info'"
+          size="small"
+          @click="onFollow"
+        >{{article.is_followed ? '取消关注' : '关注'}}</van-button>
+      </van-cell>
+      <!-- /文章相关信息 -->
+      <!-- 文章内容 -->
+      <div
+        class="markdown-body"
+        v-html="article.content"
+        ref="article-content"
+      >
+      </div>
+      <!-- /文章内容 -->
+      <!-- 评论模块 -->
+      <comment-list :source="articleId" />
+      <!-- /评论模块 -->
     </div>
     <!-- 相关操作 -->
     <div class="article-bottom">
@@ -85,6 +88,7 @@ import {
 } from '@/api/article'
 import { ImagePreview } from 'vant'
 import { addFollow, delFollow } from '@/api/user'
+import CommentList from './components/comment-list'
 
 export default {
   name: 'ArticleIndex',
@@ -94,7 +98,9 @@ export default {
       required: true
     }
   },
-  components: {},
+  components: {
+    CommentList
+  },
   data () {
     return {
       article: {}, // 文章详情对象
@@ -110,7 +116,7 @@ export default {
     // 加载文章详情
     async onloadArticle () {
       const { data } = await getArticleById(this.articleId)
-      console.log(data)
+      // console.log(data)
       this.article = data.data
       // 图片预览
       // 数据改变影响视图更新（DOM不是立即的）
