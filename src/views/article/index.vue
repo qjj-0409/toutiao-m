@@ -47,35 +47,48 @@
       <comment-list
         :source="articleId"
         :list="commentList"
+        @comment-total-count="commentTotalCount = $event"
       />
       <!-- /评论模块 -->
     </div>
     <!-- 相关操作 -->
     <div class="article-bottom">
+      <!-- 发表评论 -->
       <van-button
         class="bottom-btn"
         type="default"
         round
         @click="isPostShow = true"
       >写评论</van-button>
+      <!-- /发表评论 -->
+      <!-- 点赞 -->
       <van-icon
         :name="article.attitude === 1 ? 'good-job' : 'good-job-o'"
         :color="article.attitude === 1 ? 'pink' : '#777777'"
         @click="onLike"
       />
+      <!-- /点赞 -->
+      <!-- 评论数量 -->
       <van-icon
+        class="comment-count"
         name="comment-o"
         color="#777777"
+        :badge="commentTotalCount"
       />
+      <!-- /评论数量 -->
+      <!-- /收藏 -->
       <van-icon
         :name="article.is_collected ? 'star' : 'star-o'"
         :color="article.is_collected ? 'orange' : '#777777'"
         @click="onCollect"
       />
+      <!-- /收藏 -->
+      <!-- 分享 -->
       <van-icon
         name="share"
         color="#777777"
       />
+      <!-- /分享 -->
     </div>
     <!-- /相关操作 -->
     <!-- 评论弹出层 -->
@@ -123,7 +136,8 @@ export default {
       article: {}, // 文章详情对象
       isFollowLoading: false, // 控制关注的loading
       isPostShow: false, // 控制评论弹出层的显示
-      commentList: [] // 文章评论列表
+      commentList: [], // 文章评论列表
+      commentTotalCount: 0 // 文章评论数
     }
   },
   computed: {},
@@ -224,6 +238,8 @@ export default {
       this.isPostShow = false
       // 添加最新评论到评论列表中
       this.commentList.unshift(newComment)
+      // 更新视图中的评论数量
+      this.commentTotalCount++
     }
   },
   mounted () {}
@@ -301,6 +317,11 @@ ul {
       text-align: unset;
       font-size: 15px;
       color: #a7a7a7;
+    }
+  }
+  .comment-count {
+    .van-info {
+      top: 3px;
     }
   }
 }

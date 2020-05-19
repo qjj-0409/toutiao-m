@@ -58,7 +58,7 @@ export default {
         offset: this.offset,
         limit: this.limit
       })
-      // console.log(data)
+      console.log(data)
       const { results } = data.data
       // 2.将数据放到数据列表中
       this.list.push(...results)
@@ -72,6 +72,9 @@ export default {
         // 如果没有，设置finished为true，不再触发加载更多
         this.finished = true
       }
+
+      // 将评论的数量传递给父组件
+      this.$emit('comment-total-count', data.data.total_count)
     }
   },
   mounted () {}
