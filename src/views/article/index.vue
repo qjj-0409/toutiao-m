@@ -44,7 +44,10 @@
       </div>
       <!-- /文章内容 -->
       <!-- 评论模块 -->
-      <comment-list :source="articleId" />
+      <comment-list
+        :source="articleId"
+        :list="commentList"
+      />
       <!-- /评论模块 -->
     </div>
     <!-- 相关操作 -->
@@ -53,6 +56,7 @@
         class="bottom-btn"
         type="default"
         round
+        @click="isPostShow = true"
       >写评论</van-button>
       <van-icon
         :name="article.attitude === 1 ? 'good-job' : 'good-job-o'"
@@ -74,6 +78,17 @@
       />
     </div>
     <!-- /相关操作 -->
+    <!-- 评论弹出层 -->
+    <van-popup
+      v-model="isPostShow"
+      position="bottom"
+    >
+      <comment-post
+        :target="articleId"
+        @post-success="onPostSuccess"
+      />
+    </van-popup>
+    <!-- /评论弹出层 -->
   </div>
 </template>
 
@@ -89,6 +104,7 @@ import {
 import { ImagePreview } from 'vant'
 import { addFollow, delFollow } from '@/api/user'
 import CommentList from './components/comment-list'
+import CommentPost from './components/comment-post'
 
 export default {
   name: 'ArticleIndex',
@@ -99,12 +115,15 @@ export default {
     }
   },
   components: {
-    CommentList
+    CommentList,
+    CommentPost
   },
   data () {
     return {
       article: {}, // 文章详情对象
-      isFollowLoading: false // 控制关注的loading
+      isFollowLoading: false, // 控制关注的loading
+      isPostShow: false, // 控制评论弹出层的显示
+      commentList: [] // 文章评论列表
     }
   },
   computed: {},
@@ -198,6 +217,13 @@ export default {
         this.article.attitude = 1
       }
       this.$toast.success(this.article.attitude === 1 ? '点赞成功' : '取消点赞成功')
+    },
+    // 发表评论成功
+    onPostSuccess (newComment) {
+      // 关闭弹出层
+      this.isPostShow = false
+      // 添加最新评论到评论列表中
+      this.commentList.unshift(newComment)
     }
   },
   mounted () {}

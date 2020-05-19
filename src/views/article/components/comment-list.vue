@@ -7,44 +7,39 @@
       finished-text="没有更多了"
       @load="onLoad"
     >
-      <van-cell
-        :border="false"
+      <comment-item
         v-for="(comment, index) in list"
         :key="index"
-        :title="comment.content"
-      >
-        <van-image
-          slot="icon"
-          width="35"
-          height="35"
-          round
-          src="https://img.yzcdn.cn/vant/cat.jpeg"
-        />
-        <div slot="title">评论人的名字</div>
-        <div slot="label">
-          <div>评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容</div>
-          <div>评论时间</div>
-        </div>
-        <van-icon slot="extra" name="good-job-o" />
-      </van-cell>
+        :comment="comment"
+      />
     </van-list>
   </div>
 </template>
 
 <script>
 import { getComments } from '@/api/comment'
+import CommentItem from './comment-item'
+
 export default {
   name: 'CommentList',
   props: {
+    // 文章id
     source: {
       type: [String, Number, Object],
       required: true
+    },
+    list: {
+      type: Array,
+      // 数组或对象的默认值必须通过函数返回
+      default: () => []
     }
   },
-  components: {},
+  components: {
+    CommentItem
+  },
   data () {
     return {
-      list: [], // 评论列表
+      // list: [], // 评论列表
       loading: false, // 加载评论的loading
       finished: false, // 控制加载结束
       offset: null, // 评论数据的偏移量，相当于页码
@@ -63,7 +58,7 @@ export default {
         offset: this.offset,
         limit: this.limit
       })
-      console.log(data)
+      // console.log(data)
       const { results } = data.data
       // 2.将数据放到数据列表中
       this.list.push(...results)

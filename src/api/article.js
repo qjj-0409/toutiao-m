@@ -8,7 +8,7 @@ import request from '@/utils/request'
  */
 export const getArticles = params => {
   return request({
-    type: 'GET',
+    method: 'GET',
     url: '/app/v1_1/articles',
     params
   })
@@ -19,7 +19,7 @@ export const getArticles = params => {
  */
 export const getArticleById = articleId => {
   return request({
-    type: 'GET',
+    method: 'GET',
     url: `/app/v1_0/articles/${articleId}`
   })
 }
@@ -29,7 +29,7 @@ export const getArticleById = articleId => {
  */
 export const addCollect = articleId => {
   return request({
-    type: 'POST',
+    method: 'POST',
     url: '/app/v1_0/article/collections',
     data: {
       target: articleId
@@ -42,7 +42,7 @@ export const addCollect = articleId => {
  */
 export const delCollect = articleId => {
   return request({
-    type: 'DELETE',
+    method: 'DELETE',
     url: `/app/v1_0/article/collections/${articleId}`
   })
 }
@@ -52,7 +52,7 @@ export const delCollect = articleId => {
  */
 export const addLike = articleId => {
   return request({
-    type: 'POST',
+    method: 'POST',
     url: '/app/v1_0/article/likings',
     data: {
       target: articleId
@@ -65,7 +65,7 @@ export const addLike = articleId => {
  */
 export const delLike = articleId => {
   return request({
-    type: 'DELETE',
+    method: 'DELETE',
     url: `/app/v1_0/article/likings/${articleId}`
   })
 }
