@@ -109,6 +109,7 @@
       :style="{ height: '100%' }"
     >
       <update-photo
+        v-if="isEditPhotoShow"
         :file="previewImage"
         @update-photo="userProfile.photo = $event"
         @close="isEditPhotoShow = false"
@@ -185,5 +186,8 @@ export default {
 }
 .update-name-popup {
   background-color: #F5F7F9;
+}
+.update-photo-popup {
+  background-color: #000;
 }
 </style>
