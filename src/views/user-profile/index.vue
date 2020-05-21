@@ -109,7 +109,9 @@
       :style="{ height: '100%' }"
     >
       <update-photo
-        :image="previewImage"
+        :file="previewImage"
+        @update-photo="userProfile.photo = $event"
+        @close="isEditPhotoShow = false"
       />
     </van-popup>
     <!-- /头像弹出层 -->
@@ -155,8 +157,9 @@ export default {
     },
     onFileChange () {
       // 在弹出层里面预览图片
-      const blob = window.URL.createObjectURL(this.$refs.file.files[0])
-      this.previewImage = blob
+      const file = this.$refs.file.files[0]
+      // const blob = window.URL.createObjectURL(this.$refs.file.files[0])
+      this.previewImage = file
       // 展示弹出层
       this.isEditPhotoShow = true
       // 为了解决相同文件不触发change事件，所以手动清空file的value
