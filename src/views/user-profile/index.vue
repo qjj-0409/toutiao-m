@@ -9,7 +9,18 @@
     <!-- /顶部导航栏 -->
     <!-- 个人信息展示 -->
     <!-- 头像 -->
-    <van-cell title="头像" is-link>
+    <input
+      type="file"
+      hidden
+      accept="image/*"
+      ref="file"
+      @change="onFileChange"
+    >
+    <van-cell
+      title="头像"
+      is-link
+      @click="$refs.file.click()"
+    >
       <van-image
         class="user-photo"
         round
@@ -90,6 +101,18 @@
       />
     </van-popup>
     <!-- /生日弹出层 -->
+    <!-- 头像弹出层 -->
+    <van-popup
+      class="update-photo-popup"
+      v-model="isEditPhotoShow"
+      position="bottom"
+      :style="{ height: '100%' }"
+    >
+      <update-photo
+        :image="previewImage"
+      />
+    </van-popup>
+    <!-- /头像弹出层 -->
   </div>
 </template>
 
@@ -98,6 +121,7 @@ import { getUserProfile } from '@/api/user'
 import UpdateName from './components/update-name'
 import UpdateGender from './components/update-gender'
 import UpdateBirthday from './components/update-birthday'
+import UpdatePhoto from './components/update-photo'
 
 export default {
   name: 'UserProfile',
@@ -105,14 +129,17 @@ export default {
   components: {
     UpdateName,
     UpdateGender,
-    UpdateBirthday
+    UpdateBirthday,
+    UpdatePhoto
   },
   data () {
     return {
       userProfile: {}, // 用户资料
       isEditNameShow: false, // 控制编辑昵称弹出层的显示/隐藏
       isEditGenderShow: false, // 控制编辑性别弹出层的显示/隐藏
-      isEditBirthdayShow: false // 控制编辑性别弹出层的显示/隐藏
+      isEditBirthdayShow: false, // 控制编辑性别弹出层的显示/隐藏
+      isEditPhotoShow: false, // 控制编辑头像弹出层的显示/隐藏
+      previewImage: null // 上传预览图片
     }
   },
   computed: {},
@@ -125,6 +152,15 @@ export default {
       const { data } = await getUserProfile()
       console.log(data)
       this.userProfile = data.data
+    },
+    onFileChange () {
+      // 在弹出层里面预览图片
+      const blob = window.URL.createObjectURL(this.$refs.file.files[0])
+      this.previewImage = blob
+      // 展示弹出层
+      this.isEditPhotoShow = true
+      // 为了解决相同文件不触发change事件，所以手动清空file的value
+      this.$refs.file.value = ''
     }
   },
   mounted () {}
