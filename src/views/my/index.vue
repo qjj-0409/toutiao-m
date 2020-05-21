@@ -24,6 +24,7 @@
           type="default"
           size="small"
           round
+          to="/my/profile"
         >编辑资料</van-button>
       </van-cell>
       <van-grid

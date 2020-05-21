@@ -42,7 +42,6 @@ export default {
       required: true
     },
     photo: {
-      type: String,
       required: true
     }
   },
