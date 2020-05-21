@@ -22,6 +22,7 @@
       title="昵称"
       is-link
       :value="userProfile.name"
+      @click="isEditNameShow = true"
     />
     <!-- 性别 -->
     <van-cell
@@ -36,19 +37,35 @@
       :value="userProfile.birthday"
     />
     <!-- /个人信息展示 -->
+    <!-- 昵称弹出层 -->
+    <van-popup
+      class="update-name-popup"
+      v-model="isEditNameShow"
+      position="bottom"
+      :style="{ height: '100%' }"
+    >
+      <update-name
+        @close="isEditNameShow = false"
+      />
+    </van-popup>
+    <!-- /昵称弹出层 -->
   </div>
 </template>
 
 <script>
 import { getUserProfile } from '@/api/user'
+import UpdateName from './components/update-name'
 
 export default {
   name: 'UserProfile',
   props: {},
-  components: {},
+  components: {
+    UpdateName
+  },
   data () {
     return {
-      userProfile: {} // 用户资料
+      userProfile: {}, // 用户资料
+      isEditNameShow: false // 控制编辑昵称弹出层的显示/隐藏
     }
   },
   computed: {},
@@ -79,5 +96,8 @@ export default {
 .user-photo {
   width: 30px;
   height: 30px;
+}
+.update-name-popup {
+  background-color: #F5F7F9;
 }
 </style>
