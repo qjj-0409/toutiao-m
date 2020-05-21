@@ -18,7 +18,7 @@ import { updateUserProfile } from '@/api/user'
 export default {
   name: 'UpdateGender',
   props: {
-    gender: {
+    value: {
       type: Number,
       required: true
     }
@@ -27,7 +27,7 @@ export default {
   data () {
     return {
       columns: ['男', '女'],
-      defaultIndex: this.gender
+      defaultIndex: this.value
     }
   },
   computed: {},
@@ -47,7 +47,7 @@ export default {
       // 3.更新成功提示
       this.$toast.success('修改性别成功')
       // 4.修改父组件的gender
-      this.$emit('update-gender', this.defaultIndex)
+      this.$emit('input', this.defaultIndex)
       // 5.关闭弹出层
       this.$emit('close')
     },

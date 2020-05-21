@@ -69,9 +69,9 @@
       :style="{ height: '40%' }"
     >
       <update-gender
+        v-if="isEditGenderShow"
+        v-model="userProfile.gender"
         @close="isEditGenderShow = false"
-        :gender="userProfile.gender"
-        @update-gender="userProfile.gender = $event"
       />
     </van-popup>
     <!-- /性别弹出层 -->
