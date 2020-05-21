@@ -66,7 +66,10 @@
     </van-cell-group>
     <!-- /认证和简介 -->
     <!-- 用户文章列表 -->
-    <article-list></article-list>
+    <article-list
+      :user-id="userId"
+      :photo="user.photo"
+    />
     <!-- /用户文章列表 -->
   </div>
 </template>
@@ -99,7 +102,7 @@ export default {
   methods: {
     async loadUser () {
       const { data } = await getUserById(this.userId)
-      console.log(data)
+      // console.log(data)
       this.user = data.data
     }
   },

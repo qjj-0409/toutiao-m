@@ -6,47 +6,104 @@
       finished-text="没有更多了"
       @load="onLoad"
     >
-      <van-cell v-for="item in list" :key="item" :title="item" />
+      <div
+        class="article-wrap"
+        v-for="(article, index) in list"
+        :key="index"
+      >
+        <van-cell :border="false">
+          <van-image
+            class="avatar"
+            slot="icon"
+            round
+            fit="cover"
+            :src="photo"
+          />
+          <div slot="title">{{article.aut_name}}</div>
+          <span slot="label">{{article.pubdate | relativeTime}}</span>
+        </van-cell>
+        <article-item
+          :article="article"
+        />
+      </div>
     </van-list>
   </div>
 </template>
 
 <script>
+import { getArticlesByUser } from '@/api/article'
+import ArticleItem from '@/components/article-item/'
+
 export default {
   name: 'ArticleList',
-  props: {},
-  components: {},
+  props: {
+    userId: {
+      type: [Number, String, Object],
+      required: true
+    },
+    photo: {
+      type: String,
+      required: true
+    }
+  },
+  components: {
+    ArticleItem
+  },
   data () {
     return {
       list: [],
       loading: false,
-      finished: false
+      finished: false,
+      page: 1, // 页数，不串默认为1
+      perPage: 10 // 每页数量，不传每页数量由后端决定
     }
   },
   computed: {},
   watch: {},
   created () {},
   methods: {
-    onLoad () {
-      // 异步更新数据
-      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1)
-        }
-
-        // 加载状态结束
-        this.loading = false
-
-        // 数据全部加载完成
-        if (this.list.length >= 40) {
-          this.finished = true
-        }
-      }, 1000)
+    async onLoad () {
+      // 1.请求获取数据
+      const { data } = await getArticlesByUser(this.userId, {
+        page: this.page,
+        per_page: this.perPage
+      })
+      console.log(data)
+      const { results } = data.data
+      this.article = results
+      // 2.将数据放到数据列表中
+      this.list.push(...results)
+      // 3.关闭本次加载的loading
+      this.loading = false
+      // 4.判断是否还有数据
+      if (results.length) {
+        // 如果有，更新下一页数据的页码
+        this.page = data.data.page++
+      } else {
+        // 如果没有，设置finised为true，不再触发加载更多
+        this.finished = true
+      }
     }
   },
   mounted () {}
 }
 </script>
 <style lang='less' scoped>
+.article-wrap {
+  margin-bottom: 6px;
+  .avatar {
+    width: 36px;
+    height: 36px;
+    margin-right: 8px;
+  }
+  .van-cell__title {
+    font-size: 14px;
+    color: #222;
+  }
+  .van-cell__label {
+    font-size: 12px;
+    color: #999999;
+    margin-top: unset;
+  }
+}
 </style>

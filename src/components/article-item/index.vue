@@ -43,7 +43,10 @@
           </div>
         </div>
         <!-- /三个封面 -->
-        <div class="label-info">
+        <div
+          class="label-info"
+          v-if="$route.path === '/'"
+        >
           <span>{{article.aut_name}}</span>
           <span>{{article.comm_count}}评论</span>
           <span>{{article.pubdate | relativeTime}}</span>
@@ -70,6 +73,27 @@
       />
       <!-- /右侧封面 -->
     </van-cell>
+    <van-grid
+      v-if="$route.name === 'user'"
+      direction="horizontal"
+      :column-num="3"
+    >
+      <van-grid-item
+        icon-prefix="toutiao"
+        icon="pinglun"
+        text="评论"
+      />
+      <van-grid-item
+        icon-prefix="toutiao"
+        icon="dianzan2"
+        text="点赞"
+      />
+      <van-grid-item
+        icon-prefix="toutiao"
+        icon="shoucang"
+        text="收藏"
+      />
+    </van-grid>
   </div>
 </template>
 
@@ -132,6 +156,18 @@ export default {
         font-size: 11px;
       }
     }
+  }
+}
+.van-grid-item {
+  height: 46px;
+}
+/deep/ .van-grid-item__content {
+  display: flex;
+  flex-direction: unset;
+  justify-content: center;
+  .van-grid-item__text {
+    margin-top: unset;
+    margin-left: 8px;
   }
 }
 </style>
