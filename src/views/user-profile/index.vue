@@ -36,6 +36,7 @@
       title="生日"
       is-link
       :value="userProfile.birthday"
+      @click="isEditBirthdayShow = true"
     />
     <!-- /个人信息展示 -->
     <!-- 昵称弹出层 -->
@@ -75,6 +76,19 @@
       />
     </van-popup>
     <!-- /性别弹出层 -->
+    <!-- 生日弹出层 -->
+    <van-popup
+      class="update-birthday-popup"
+      v-model="isEditBirthdayShow"
+      position="bottom"
+      :style="{ height: '40%' }"
+    >
+      <update-birthday
+        :birthday="userProfile.birthday"
+        @close="isEditBirthdayShow = false"
+      />
+    </van-popup>
+    <!-- /生日弹出层 -->
   </div>
 </template>
 
@@ -82,19 +96,22 @@
 import { getUserProfile } from '@/api/user'
 import UpdateName from './components/update-name'
 import UpdateGender from './components/update-gender'
+import UpdateBirthday from './components/update-birthday'
 
 export default {
   name: 'UserProfile',
   props: {},
   components: {
     UpdateName,
-    UpdateGender
+    UpdateGender,
+    UpdateBirthday
   },
   data () {
     return {
       userProfile: {}, // 用户资料
       isEditNameShow: false, // 控制编辑昵称弹出层的显示/隐藏
-      isEditGenderShow: false // 控制编辑性别弹出层的显示/隐藏
+      isEditGenderShow: false, // 控制编辑性别弹出层的显示/隐藏
+      isEditBirthdayShow: false // 控制编辑性别弹出层的显示/隐藏
     }
   },
   computed: {},
