@@ -9,7 +9,7 @@
     />
     <van-field
       class="name-field"
-      v-model="message"
+      v-model="localName"
       rows="2"
       autosize
       type="textarea"
@@ -21,20 +21,44 @@
 </template>
 
 <script>
+import { updateUserProfile } from '@/api/user'
+
 export default {
   name: 'UpdateName',
-  props: {},
+  props: {
+    name: {
+      type: String,
+      required: true
+    }
+  },
   components: {},
   data () {
     return {
-      message: '' // 输入框的值
+      localName: this.name // 输入框的值
     }
   },
   computed: {},
   watch: {},
   created () {},
   methods: {
-    onConfirm () {}
+    async onConfirm () {
+      // 1.加载中
+      this.$toast.loading({
+        message: '操作中...',
+        forbidClick: true // 启用背景点击
+      })
+      // 2.更新用户昵称
+      await updateUserProfile({
+        name: this.localName
+      })
+      // 3.更新成功提示
+      this.$toast.success('修改昵称成功')
+      // 4.修改父组件的name
+      this.$emit('update-name', this.localName)
+      // 5.关闭弹出层
+      this.$emit('close')
+      // 6.昵称可能存在重名，try-catch捕获一下
+    }
   },
   mounted () {}
 }
