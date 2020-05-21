@@ -44,10 +44,18 @@
       position="bottom"
       :style="{ height: '100%' }"
     >
-      <update-name
-        v-if="isEditNameShow"
+      <!--
+        v-model="userProfile.name"
+        是对以下代码的优化：
         :name="userProfile.name"
         @update-name="userProfile.name = $event"
+        相当于：
+        :value="userProfile.name"
+        @input="userProfile.name = $event"
+      -->
+      <update-name
+        v-if="isEditNameShow"
+        v-model="userProfile.name"
         @close="isEditNameShow = false"
       />
     </van-popup>

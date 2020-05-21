@@ -26,7 +26,7 @@ import { updateUserProfile } from '@/api/user'
 export default {
   name: 'UpdateName',
   props: {
-    name: {
+    value: {
       type: String,
       required: true
     }
@@ -34,7 +34,7 @@ export default {
   components: {},
   data () {
     return {
-      localName: this.name // 输入框的值
+      localName: this.value // 输入框的值
     }
   },
   computed: {},
@@ -42,22 +42,28 @@ export default {
   created () {},
   methods: {
     async onConfirm () {
-      // 1.加载中
-      this.$toast.loading({
-        message: '操作中...',
-        forbidClick: true // 启用背景点击
-      })
-      // 2.更新用户昵称
-      await updateUserProfile({
-        name: this.localName
-      })
-      // 3.更新成功提示
-      this.$toast.success('修改昵称成功')
-      // 4.修改父组件的name
-      this.$emit('update-name', this.localName)
-      // 5.关闭弹出层
-      this.$emit('close')
-      // 6.昵称可能存在重名，try-catch捕获一下
+      try {
+        // 1.加载中
+        this.$toast.loading({
+          message: '操作中...',
+          forbidClick: true // 启用背景点击
+        })
+        // 2.更新用户昵称
+        await updateUserProfile({
+          name: this.localName
+        })
+        // 3.更新成功提示
+        this.$toast.success('修改昵称成功')
+        // 4.修改父组件的name
+        this.$emit('input', this.localName)
+        // 5.关闭弹出层
+        this.$emit('close')
+        // 6.昵称可能存在重名，try-catch捕获一下
+      } catch (error) {
+        if (error && error.response && error.response.status === 409) {
+          this.$toast.fail('昵称已存在')
+        }
+      }
     }
   },
   mounted () {}
