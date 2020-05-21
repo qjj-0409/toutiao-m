@@ -19,7 +19,7 @@ import dayjs from 'dayjs'
 export default {
   name: 'UpdateBirthday',
   props: {
-    birthday: {
+    value: {
       type: String,
       required: true
     }
@@ -29,7 +29,7 @@ export default {
     return {
       minDate: new Date(1980, 0, 1), // 可选的最小的时间
       maxDate: new Date(2020, 10, 1), // 可选的最大时间
-      currentDate: new Date(this.birthday) // 当前时间
+      currentDate: new Date(this.value) // 当前时间
     }
   },
   computed: {},
@@ -46,7 +46,7 @@ export default {
       // 3.修改成功提示
       this.$toast.success('修改生日成功')
       // 4.更新父组件中的生日
-      this.$emit('update-birthday', time)
+      this.$emit('input', time)
       // 5.关闭弹出层
       this.$emit('close')
     }

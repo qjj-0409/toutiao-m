@@ -84,8 +84,8 @@
       :style="{ height: '40%' }"
     >
       <update-birthday
-        :birthday="userProfile.birthday"
-        @update-birthday="userProfile.birthday = $event"
+        v-if="isEditBirthdayShow"
+        v-model="userProfile.birthday"
         @close="isEditBirthdayShow = false"
       />
     </van-popup>
