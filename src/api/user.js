@@ -79,3 +79,11 @@ export const addUserFollow = userId => {
     }
   })
 }
+
+// 获取用户个人资料
+export const getUserProfile = () => {
+  return request({
+    method: 'GET',
+    url: '/app/v1_0/user/profile'
+  })
+}
