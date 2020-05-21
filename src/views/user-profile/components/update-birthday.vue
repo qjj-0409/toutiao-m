@@ -13,6 +13,9 @@
 </template>
 
 <script>
+import { updateUserProfile } from '@/api/user'
+import dayjs from 'dayjs'
+
 export default {
   name: 'UpdateBirthday',
   props: {
@@ -33,7 +36,20 @@ export default {
   watch: {},
   created () {},
   methods: {
-    onCofirm () {}
+    async onCofirm () {
+      // 1.加载中提示
+      // 2.修改生日
+      const time = dayjs(this.currentDate).format('YYYY-MM-DD')
+      await updateUserProfile({
+        birthday: time
+      })
+      // 3.修改成功提示
+      this.$toast.success('修改生日成功')
+      // 4.更新父组件中的生日
+      this.$emit('update-birthday', time)
+      // 5.关闭弹出层
+      this.$emit('close')
+    }
   },
   mounted () {}
 }

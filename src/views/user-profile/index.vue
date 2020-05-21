@@ -85,6 +85,7 @@
     >
       <update-birthday
         :birthday="userProfile.birthday"
+        @update-birthday="userProfile.birthday = $event"
         @close="isEditBirthdayShow = false"
       />
     </van-popup>
