@@ -40,7 +40,7 @@ export default {
     // 3.创建画布
     getCroppedCanvas () {
       return new Promise(resolve => {
-        this.cropper.getCroppedCanvas().toBlob((file) => {
+        this.cropper.getCroppedCanvas().toBlob(file => {
           resolve(file)
         })
       })
@@ -83,6 +83,9 @@ export default {
 }
 </script>
 <style lang='less' scoped>
+.update-photo {
+  height: 100%;
+}
 .van-nav-bar {
   position: fixed;
   left: 0;
