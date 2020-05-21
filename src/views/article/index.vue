@@ -14,16 +14,27 @@
       <h1 class="article-title">{{article.title}}</h1>
       <!-- /标题 -->
       <!-- 文章相关信息 -->
-      <van-cell center :border="false">
-        <div slot="title">{{article.aut_name}}</div>
-        <span slot="label">{{article.pubdate | relativeTime}}</span>
-        <van-image
-          class="avatar"
-          slot="icon"
-          round
-          fit="cover"
-          :src="article.aut_photo"
-        />
+      <div class="user-info">
+        <van-cell
+          center
+          :border="false"
+          :to="{
+            name: 'user',
+            params: {
+              userId: article.aut_id
+            }
+          }"
+        >
+          <div slot="title">{{article.aut_name}}</div>
+          <span slot="label">{{article.pubdate | relativeTime}}</span>
+          <van-image
+            class="avatar"
+            slot="icon"
+            round
+            fit="cover"
+            :src="article.aut_photo"
+          />
+        </van-cell>
         <van-button
           class="article-btn"
           round
@@ -33,7 +44,7 @@
           size="small"
           @click="onFollow"
         >{{article.is_followed ? '取消关注' : '关注'}}</van-button>
-      </van-cell>
+      </div>
       <!-- /文章相关信息 -->
       <!-- 文章内容 -->
       <div
@@ -351,6 +362,18 @@ ul {
     .van-info {
       top: 3px;
     }
+  }
+}
+.user-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  .van-cell {
+    width: unset;
+  }
+  .article-btn {
+    margin-right: 16px;
   }
 }
 </style>
