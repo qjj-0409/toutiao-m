@@ -63,6 +63,10 @@ export default {
   created () {},
   methods: {
     async onLoad () {
+      this.$toast.loading({
+        message: '加载中...',
+        forbidClick: true // 禁止背景点击
+      })
       // 1.请求获取数据
       const { data } = await getArticlesByUser(this.userId, {
         page: this.page,

@@ -68,3 +68,14 @@ export const getUserById = userId => {
     url: `/app/v1_0/users/${userId}`
   })
 }
+
+// 关注用户
+export const addUserFollow = userId => {
+  return request({
+    method: 'POST',
+    url: '/app/v1_0/user/followings',
+    data: {
+      target: userId
+    }
+  })
+}

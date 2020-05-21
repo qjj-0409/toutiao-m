@@ -44,8 +44,9 @@
       <van-button
         class="focus-btn"
         slot="label"
-        type="info"
-      >关注</van-button>
+        :type="user.is_following ? 'primary' : 'info'"
+        @click="addFollow"
+      >{{user.is_following ? '已关注' : '关注'}}</van-button>
     </van-cell>
     <!-- /用户个人信息 -->
     <!-- 认证和简介 -->
@@ -76,7 +77,7 @@
 
 <script>
 import ArticleList from './components/article-list'
-import { getUserById } from '@/api/user'
+import { getUserById, addUserFollow } from '@/api/user'
 
 export default {
   name: 'UserIndex',
@@ -104,6 +105,17 @@ export default {
       const { data } = await getUserById(this.userId)
       // console.log(data)
       this.user = data.data
+    },
+    async addFollow () {
+      this.$toast.loading({
+        message: '加载中...',
+        forbidClick: true // 禁止背景点击
+      })
+      await addUserFollow(this.userId)
+      // 更新视图
+      this.user.is_following = !this.user.is_following
+      // 轻提示
+      this.$toast.success(this.user.is_following ? '关注成功' : '取消关注')
     }
   },
   mounted () {}
