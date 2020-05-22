@@ -93,7 +93,7 @@
       class="mb-4"
       title="小智同学"
       is-link
-      to="/"
+      to="/my/chat"
     />
     <!-- /小智同学 -->
     <!-- 退出登录 -->
