@@ -8,7 +8,10 @@
     />
     <!-- /顶部导航栏 -->
     <!-- 聊天内容区 -->
-    <van-cell-group class="message-list-wrap">
+    <van-cell-group
+      class="message-list-wrap"
+      ref="message-list"
+    >
       <van-cell
         v-for="(item, index) in messageList"
         :key="index"
@@ -37,6 +40,7 @@
 <script>
 // 导入socket.io-client
 import io from 'socket.io-client'
+import { setItem, getItem } from '@/utils/storage'
 
 export default {
   name: 'UserChat',
@@ -46,11 +50,21 @@ export default {
     return {
       message: '', // 输入框内容
       socket: null, // 全局定义socket连接，方便使用
-      messageList: [] // 消息列表
+      messageList: getItem('chat-messageList') || [] // 消息列表
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    // 监视消息列表数据的变化
+    messageList () {
+      setItem('chat-messageList', this.messageList)
+      // 如果需要在操作数据之后立即操作数据影响的视图DOM，那么最好把代码放到nextTick函数中
+      // 因为数据改变影响视图更新不是立即的
+      this.$nextTick(() => {
+        this.scrollToBottom()
+      })
+    }
+  },
   created () {
     // 建立连接
     const socket = io('http://ttapi.research.itcast.cn')
@@ -81,9 +95,19 @@ export default {
       this.messageList.push(data)
       // 清空输入框
       this.message = ''
+    },
+    scrollToBottom () {
+      // 1.给消息列表绑定ref属性
+      // 2.获取消息列表的DOM元素
+      const messages = this.$refs['message-list']
+      // 3.给消息列表元素设置scrollTop属性值为可滚动的最大值
+      messages.scrollTop = messages.scrollHeight
     }
   },
-  mounted () {}
+  mounted () {
+    // 在页面一加载就要使消息列表滚动到底部
+    this.scrollToBottom()
+  }
 }
 </script>
 <style lang='less' scoped>
