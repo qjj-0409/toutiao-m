@@ -9,22 +9,11 @@
     <!-- /顶部导航栏 -->
     <!-- 聊天内容区 -->
     <van-cell-group class="message-list-wrap">
-      <van-cell title="单元格" value="内容" />
-      <van-cell title="单元格" value="内容" />
-      <van-cell title="单元格" value="内容" />
-      <van-cell title="单元格" value="内容" />
-      <van-cell title="单元格" value="内容" />
-      <van-cell title="单元格" value="内容" />
-      <van-cell title="单元格" value="内容" />
-      <van-cell title="单元格" value="内容" />
-      <van-cell title="单元格" value="内容" />
-      <van-cell title="单元格" value="内容" />
-      <van-cell title="单元格" value="内容" />
-      <van-cell title="单元格" value="内容" />
-      <van-cell title="单元格" value="内容" />
-      <van-cell title="单元格" value="内容" />
-      <van-cell title="单元格" value="内容" />
-      <van-cell title="单元格" value="内容" />
+      <van-cell
+        v-for="(item, index) in messageList"
+        :key="index"
+        :title="item.msg"
+      />
     </van-cell-group>
     <!-- /聊天内容区 -->
     <!-- 底部发消息区 -->
@@ -38,6 +27,7 @@
         slot="right-icon"
         type="primary"
         size="small"
+        @click="onSend"
       >发布</van-button>
     </van-cell>
     <!-- /底部发消息区 -->
@@ -45,19 +35,54 @@
 </template>
 
 <script>
+// 导入socket.io-client
+import io from 'socket.io-client'
+
 export default {
   name: 'UserChat',
   props: {},
   components: {},
   data () {
     return {
-      message: '' // 输入框内容
+      message: '', // 输入框内容
+      socket: null, // 全局定义socket连接，方便使用
+      messageList: [] // 消息列表
     }
   },
   computed: {},
   watch: {},
-  created () {},
-  methods: {},
+  created () {
+    // 建立连接
+    const socket = io('http://ttapi.research.itcast.cn')
+    this.socket = socket
+    // 连接成功
+    socket.on('connect', () => {
+      console.log('建立连接成功')
+    })
+    // 断开连接
+    socket.on('disconnect', () => {
+      console.log('断开连接')
+    })
+    // 监听message事件，接收服务端消息
+    socket.on('message', data => {
+      console.log('收到服务端消息', data)
+      // 同样存放服务器返回的数据到消息列表中
+      this.messageList.push(data)
+    })
+  },
+  methods: {
+    onSend () {
+      const data = {
+        msg: this.message, // 聊天输入内容，接口中定义的
+        timestamp: new Date() // 聊天发送时间戳
+      }
+      this.socket.emit('message', data)
+      // 存放用户发送的消息到消息列表中
+      this.messageList.push(data)
+      // 清空输入框
+      this.message = ''
+    }
+  },
   mounted () {}
 }
 </script>
