@@ -101,10 +101,18 @@ export default {
         forbidClick: true, // 是否禁止背景点击
         duration: 0 // 展示时长(ms)，值为 0 时，toast 不会消失
       })
+      // 1.找到数据接口
+      // 2.封装请求方法
+      // 3.请求调用登录
       try {
         const { data } = await login(this.user)
+        // 4.处理响应结果
         Toast.success('登录成功')
+        // 将后端返回的用户登录状态（token等数据）放到Vuex容器中
         this.$store.commit('setUser', data.data)
+
+        // 清除layout的缓存，让它重新渲染
+        this.$store.commit('removeCachePage', 'LayoutIndex')
 
         // 登录成功，跳转到来时的页面
         this.$router.back()

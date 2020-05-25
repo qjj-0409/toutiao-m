@@ -1,7 +1,10 @@
 <template>
   <div class="layout-container">
     <!-- 子路由出口 -->
-    <router-view />
+    <!-- layout的子路由出口，或者说是二级路由 -->
+    <keep-alive>
+      <router-view />
+    </keep-alive>
     <!-- 底部tabbar栏 -->
     <van-tabbar v-model="active" route>
       <van-tabbar-item to="/" icon-prefix="toutiao" icon="shouye">首页</van-tabbar-item>
@@ -27,7 +30,9 @@ export default {
   watch: {},
   created () {},
   methods: {},
-  mounted () {}
+  mounted () {
+    this.$store.commit('addCachePage', 'LayoutIndex')
+  }
 }
 </script>
 <style lang='less' scoped>
