@@ -125,7 +125,10 @@ export default {
     // 点击我的频道触发的函数
     onUserChannelClick (channel, index) {
       if (this.isEditShow) {
-        // 编辑状态，删除点击的频道
+        // 编辑状态，删除点击的频道(不包括推荐频道)
+        if (channel.name === '推荐') {
+          return
+        }
         this.deleteChannel(channel, index)
       } else {
         // 非编辑状态，切换首页的频道

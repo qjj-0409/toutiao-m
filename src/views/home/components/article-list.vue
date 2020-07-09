@@ -1,5 +1,9 @@
 <template>
-  <div class="articleList-container">
+<!-- 2.给文章列表添加ref属性 -->
+  <div
+    class="articleList-container"
+    ref="article-list"
+  >
     <!-- PullRefresh组件
          - v-model：是否处于加载中状态，绑定下拉刷新加载的loading
          - success-text：刷新成功提示文案
@@ -36,6 +40,8 @@
 <script>
 import { getArticles } from '@/api/article'
 import ArticleItem from '@/components/article-item/'
+// 导入lodash中的防抖函数
+import { debounce } from 'lodash'
 
 export default {
   name: 'ArticleList',
@@ -55,7 +61,9 @@ export default {
       finished: false, // 控制加载结束的状态，当值为true时，不再触发加载更多
       timestamp: null, // 获取下一页数据的时间戳，以此获取下一页数据
       isRefreshing: false, // 下拉刷新的loading状态
-      refreshSuccessText: '' // 下拉刷新成功后的提示文本
+      refreshSuccessText: '', // 下拉刷新成功后的提示文本
+      // 1.定义列表滚动位置到顶部的距离
+      scrollTop: 0 // 列表滚动到顶部的距离
     }
   },
   computed: {},
@@ -107,7 +115,19 @@ export default {
       this.refreshSuccessText = `更新了${results.length}条数据`
     }
   },
-  mounted () {}
+  mounted () {
+    // 3.在mounted()函数中获取文章列表的DOM元素
+    const articleList = this.$refs['article-list']
+    // 4.根据DOM元素获取当前滚动条到顶部的距离（这种操作会频繁触发，所以要做好防抖策略）
+    articleList.onscroll = debounce(() => {
+      this.scrollTop = articleList.scrollTop
+    }, 50)
+  },
+  // keep-alive缓存后，activated()和deactivated()可以使用了
+  activated () {
+    // 5.在activated()中把记录的顶部卷起的高度重新设置回去
+    this.$refs['article-list'].scrollTop = this.scrollTop
+  }
 }
 </script>
 <style lang='less' scoped>

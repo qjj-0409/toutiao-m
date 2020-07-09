@@ -2,7 +2,7 @@
   <div class="comment-reply">
     <!-- 顶部导航栏 -->
     <van-nav-bar
-      :title="`${replyCount}条回复`"
+      :title="`${replyComment.reply_count}条回复`"
     >
       <van-icon
         slot="left"
@@ -89,9 +89,9 @@ export default {
       // replyComment是对当前评论项的回复
       // 发布回复成功，将回复追加到当前评论回复列表的前面
       this.replyList.unshift(replyComment)
-      // 更新视图中的回复数量
-      // this.replyComment.reply_count++
       this.replyCount++
+      // 更新视图中的回复数量
+      this.replyComment.reply_count = this.replyCount
       // 关闭弹出层
       this.isPostShow = false
     }

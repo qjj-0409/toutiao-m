@@ -6,6 +6,9 @@ import JSONbig from 'json-bigint'
 
 // 在非组件模块中获取store必须通过import导入
 import store from '@/store/'
+import { removeItem } from './storage'
+import router from '@/router'
+import { Toast } from 'vant'
 
 const request = axios.create({
   baseURL: 'http://ttapi.research.itcast.cn/',
@@ -50,5 +53,55 @@ request.interceptors.request.use(function (config) {
   // 对请求错误做些什么
   return Promise.reject(error)
 })
+
+// 响应拦截器
+request.interceptors.response.use(function (response) {
+  // 对响应数据做点什么
+  return response
+}, async function (error) {
+  // 对响应错误做点什么
+  const { status } = error.response
+  if (status === 401) {
+    // 用户认证失败
+    // 判断是否有user或者user.token
+    const { user } = store.state
+    // 没有，直接去登录
+    if (!user || !user.token) {
+      return redirectLogin()
+    }
+    // 有，则使用refresh_token请求获取新的token
+    try {
+      const { data } = await request({
+        method: 'PUT',
+        url: '/app/v1_0/authorizations',
+        headers: {
+          Authorization: `Bearer ${user.refresh_token}`
+        }
+      })
+      // 拿到新的token之后，把它更新到容器中
+      user.token = data.data.token
+      store.commit('setUser', user)
+      return request(error.config)
+    } catch (error) {
+      Toast.fail('用户认证失败')
+      // 1.清除本地存储中得用户登录状态
+      removeItem('user')
+      // 2.跳转到登录页面
+      redirectLogin()
+    }
+  } else if (status === 400) {
+    Toast.fail('请求参数错误，请检查请求参数')
+  } else if (status === 507) {
+    Toast.fail('数据库错误，联系后端人员')
+  } else if (status === 403) {
+    Toast.fail('没有权限操作')
+  }
+  return Promise.reject(error)
+})
+
+// 封装一个函数重定向到登录页面
+function redirectLogin () {
+  router.push('/login')
+}
 
 export default request
